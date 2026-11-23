@@ -1,7 +1,7 @@
 [project]
-name = "finanzas-ia"
+name = "moni"
 version = "0.1.0"
-description = "Finanzas personales con asistente local (Ollama)"
+description = "Moni: finanzas personales con asistente local (Ollama)"
 requires-python = ">=3.12"
 dependencies = [
   "fastapi>=0.115",

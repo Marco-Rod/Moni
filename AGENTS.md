@@ -10,7 +10,7 @@ App de finanzas personales (ingresos, gastos, obligaciones mensuales, deudas, in
 - BD: PostgreSQL 16 + pgvector
 - IA: Ollama (chat `qwen2.5:7b`, embeddings `bge-m3`, configurables por `.env`)
 - Infra: Docker Compose
-- Frontend: pendiente (ver `docs/decisions/`)
+- Frontend: React 18 + TypeScript + Vite + Tailwind 4 + TanStack Query (ADR 0003)
 
 ## Comandos (úsalos, no inventes otros)
 | Comando | Qué hace |
@@ -18,8 +18,9 @@ App de finanzas personales (ingresos, gastos, obligaciones mensuales, deudas, in
 | `make up` / `make down` | Levanta / detiene servicios |
 | `make test` | pytest con Postgres real |
 | `make lint` / `make fmt` | ruff check+format / autoformato |
-| `make typecheck` | mypy estricto |
-| `make check` | lint + typecheck + test (lo mismo que el CI) |
+| `make typecheck` | mypy estricto (backend) |
+| `make front-check` | typecheck + build del frontend |
+| `make check` | lint + typecheck + test + front-check (lo mismo que el CI) |
 | `make migration m="..."` | Genera migración Alembic |
 | `make migrate` | Aplica migraciones |
 
@@ -29,6 +30,7 @@ backend/app/api/      routers FastAPI (delgados: validan y delegan)
 backend/app/models/   modelos SQLAlchemy
 backend/app/          (futuro) services/, schemas/, ai/
 backend/tests/
+frontend/src/       React (lib/ utilidades, App.tsx; agregar components/, pages/, hooks/ según crezca)
 docs/                 architecture, data-model, roadmap, decisions/ (ADRs), specs/
 infra/                scripts de infraestructura
 ```
@@ -39,10 +41,11 @@ Lógica de negocio va en `services/`, no en routers ni modelos.
 2. **Todo dato de usuario lleva `user_id`** y toda consulta filtra por él.
 3. **El LLM no calcula.** Python calcula totales, ratios, intereses y proyecciones; el modelo solo recibe cifras ya calculadas e interpreta. Ver `docs/decisions/0002-llm-no-calcula.md`.
 4. **Sin text-to-SQL libre.** El asistente solo accede a datos mediante funciones predefinidas de solo lectura.
-5. **Privacidad:** no llamar APIs externas con datos financieros. Sin secretos ni datos reales en el repo, logs o fixtures.
-6. **Migraciones:** todo cambio de esquema = migración Alembic con `downgrade` funcional. Nunca editar una migración ya mergeada.
-7. **No modificar** `.env`, migraciones ya mergeadas, ni reglas de CI/ramas sin autorización explícita en el issue.
-8. Si una decisión importante no está documentada, crea un ADR en `docs/decisions/` en el mismo PR.
+5. **Frontend:** la API manda dinero como string decimal; el frontend solo lo formatea, nunca hace aritmética monetaria con `number`. Datos del servidor con TanStack Query; sin librerías de estado global ni de UI nuevas sin ADR.
+6. **Privacidad:** no llamar APIs externas con datos financieros. Sin secretos ni datos reales en el repo, logs o fixtures.
+7. **Migraciones:** todo cambio de esquema = migración Alembic con `downgrade` funcional. Nunca editar una migración ya mergeada.
+8. **No modificar** `.env`, migraciones ya mergeadas, ni reglas de CI/ramas sin autorización explícita en el issue.
+9. Si una decisión importante no está documentada, crea un ADR en `docs/decisions/` en el mismo PR.
 
 ## Flujo de trabajo
 1. Toma un issue (con criterios de aceptación). Si no es claro o es mayor a ~400 líneas, pide dividirlo; no adivines.

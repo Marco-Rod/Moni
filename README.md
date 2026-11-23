@@ -1,11 +1,11 @@
-# Finanzas IA
+# Moni
 
 Sistema personal para llevar ingresos, gastos, obligaciones mensuales, deudas e ingresos extra, con un asistente local (Ollama) que explica, analiza y aconseja sobre *tus* números sin enviar datos a terceros.
 
 > Estado: esqueleto inicial. Ver [`docs/roadmap.md`](docs/roadmap.md).
 
 ## Stack
-FastAPI · SQLAlchemy 2 · Alembic · PostgreSQL 16 + pgvector · Ollama · Docker Compose · Frontend por decidir.
+FastAPI · SQLAlchemy 2 · Alembic · PostgreSQL 16 + pgvector · Ollama · Docker Compose · React · Vite · Tailwind · TanStack Query.
 
 ## Arranque rápido
 ```bash
