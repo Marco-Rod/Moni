@@ -1,4 +1,4 @@
-.PHONY: help up down logs build test lint fmt typecheck check migrate migration psql pull-models
+.PHONY: help up down logs build test lint fmt typecheck front-check check migrate migration psql pull-models
 
 help:            ## Lista de comandos
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "%-14s %s\n", $$1, $$2}'
@@ -27,7 +27,10 @@ fmt:             ## Formatea el código
 typecheck:       ## mypy
 	docker compose run --rm api mypy app
 
-check: lint typecheck test  ## Todo lo que corre el CI
+front-check:     ## Typecheck + build del frontend
+	docker compose run --rm web sh -c "npm run typecheck && npm run build"
+
+check: lint typecheck test front-check  ## Todo lo que corre el CI
 
 migrate:         ## Aplica migraciones
 	docker compose run --rm api alembic upgrade head

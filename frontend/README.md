@@ -1,8 +1,11 @@
-# Frontend
+# Frontend (Moni web)
 
-Pendiente de decidir (ver `docs/decisions/`). Opciones evaluadas:
+React 18 + TypeScript + Vite + Tailwind 4 + TanStack Query. Decisión: `docs/decisions/0003-frontend-stack.md`.
 
-- **React + Vite + Tailwind + TanStack Query** (recomendada para trabajo con agentes)
-- **FastAPI + HTMX** (lo más simple; sin proyecto separado)
+```bash
+make up                 # http://localhost:5173
+```
 
-Cuando se decida: crear ADR, agregar servicio `web` al `docker-compose.yml` y job de CI.
+- Las llamadas van a `/api/*`; Vite las reenvía al backend quitando el prefijo.
+- Dinero: la API lo manda como string decimal. Solo formatear con `src/lib/money.ts`.
+- Primera vez: ejecuta `npm install` en esta carpeta y **commitea `package-lock.json`** (el CI usa `npm ci`).

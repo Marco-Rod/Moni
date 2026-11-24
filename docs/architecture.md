@@ -1,7 +1,7 @@
 # Arquitectura
 
 ```
-[Frontend] → [FastAPI api] → [PostgreSQL + pgvector]
+[Frontend React/Vite] → [FastAPI api] → [PostgreSQL + pgvector]
                   │
                   └──→ [Ollama] (chat + embeddings)
 ```

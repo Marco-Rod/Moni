@@ -43,9 +43,15 @@ services:
     #           count: all
     #           capabilities: [gpu]
 
-  # web:   # Se agrega cuando se decida el framework (ver docs/decisions)
-  #   build: ./frontend
-  #   ports: ["5173:5173"]
+  web:
+    build: ./frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
 
 volumes:
   pgdata:
